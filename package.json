@@ -1,0 +1,15 @@
+{
+  "name": "frank-native-core",
+  "version": "2.0.16",
+  "description": "make oop standard",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "author": "Harry Lien",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^3.0.3"
+  }
+}
