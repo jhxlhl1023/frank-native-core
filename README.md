@@ -7,8 +7,9 @@
 ## Usage
 Redesign the management about JavaScript prototype chain inheritance,Make every instance has independent prototype chain.
 In other words:make inheritance like Java.
-###Orignal oop code:
-function ClassA(){
+### Orignal oop code:
+```js
+function Parent(){
  
     var data;
  
@@ -27,31 +28,27 @@ function ClassA(){
 };
 
   
-function ClassB(){};
+function Child(){};
  
-ClassB.prototype = new ClassA();
+Child.prototype = new Parent();
  
-function ClassC(){};
+var b = new Child();
  
-ClassC.prototype = new ClassC();
- 
-var b = new ClassB();
- 
-var c = new ClassC();
+var c = new Child();
  
 b.setData("b");
  
 c.setData("c");
  
-console.log("b:"+b.getData());//"b:c",X
+console.log("b:"+b.getData());//"b:c", incorrect
  
-console.log("c:"+c.getData());//"c:c",V
- 
-###Now oop code
- 
+console.log("c:"+c.getData());//"c:c", correct
+ ```
+### Now oop code
+ ```js
   const Frank = require("require");
  
-  const ClassA = Frank.buildType("SuperClass").classBody(function(){
+  const Parent = Frank.buildType("Parent").classBody(function(){
  
     var data;
  
@@ -69,24 +66,23 @@ console.log("c:"+c.getData());//"c:c",V
  
 }).toClass();
  
-const ClassB = Frank.buildType("ClassB").extendsFrom(ClassB).toClass();
+const Child = Frank.buildType("Child").extendsFrom(Parent).toClass();
  
-const ClassC = Frank.buildType("ClassC").extendsFrom(ClassC).toClass();
  
-var b = Frank.newInstance(ClassB);//or ClassB.newInstance() or new ClassB();
+var b = Frank.newInstance(Child);//or Child.newInstance() or new Child();
  
-var c = Frank.newInstance(ClassC);//or ClassC.newInstance() or new ClassC();
+var c = Frank.newInstance(Child);//or Child.newInstance() or new Child();
  
 b.setData("b");
  
 c.setData("c");
  
-console.log("b:"+b.getData());//"b:b",V
+console.log("b:"+b.getData());//"b:b" correct
  
-console.log("c:"+c.getData());//"c:c",V
- 
+console.log("c:"+c.getData());//"c:c" correct
+ ```
 ## Developing
- 
+ ```js
 const Frank = require("frank-native-core");
  
 const SuperClass = function () {};
@@ -135,77 +131,62 @@ student.name("Tom").age(20);
  
 teacher.name("Lili").age(30);
  
-console.log("student.isInstance(   SuperClass)  :  " + new Boolean(student.isInstance(SuperClass)).toString());
+console.log("student.isInstance(   SuperClass)  :  " + student.isInstance(SuperClass);
  
-console.log("student.isInstance(       Person)  :  " + new Boolean(student.isInstance(Person)).toString());
+console.log("student.isInstance(       Person)  :  " + student.isInstance(Person);
  
-console.log("student.isInstance(      Student)  :  " + new Boolean(student.isInstance(Student)).toString());
+console.log("student.isInstance(      Student)  :  " + student.isInstance(Student);
  
-console.log("Student.isAssignableFrom( Person)  :  " + new Boolean(Student.isAssignableFrom(Person)).toString());
+console.log("Student.isAssignableFrom( Person)  :  " + Student.isAssignableFrom(Person);
  
-console.log("Student.isAssignableFrom(Student)  :  " + new Boolean(Student.isAssignableFrom(Student)).toString());
+console.log("Student.isAssignableFrom(Student)  :  " + Student.isAssignableFrom(Student);
  
-//
-console.log("teacher.isInstance(   SuperClass)  :  " + new Boolean(teacher.isInstance(SuperClass)).toString());
+console.log("teacher.isInstance(   SuperClass)  :  " + teacher.isInstance(SuperClass);
  
-console.log("teacher.isInstance(       Person)  :  " + new Boolean(teacher.isInstance(Person)).toString());
+console.log("teacher.isInstance(       Person)  :  " + teacher.isInstance(Person);
  
-console.log("teacher.isInstance(      Teacher)  :  " + new Boolean(teacher.isInstance(Teacher)).toString());
+console.log("teacher.isInstance(      Teacher)  :  " + teacher.isInstance(Teacher);
  
-console.log("Teacher.isAssignableFrom( Person)  :  " + new Boolean(Teacher.isAssignableFrom(Person)).toString());
+console.log("Teacher.isAssignableFrom( Person)  :  " + Teacher.isAssignableFrom(Person);
  
-console.log("Teacher.isAssignableFrom(Teacher)  :  " + new Boolean(Teacher.isAssignableFrom(Teacher)).toString());
+console.log("Teacher.isAssignableFrom(Teacher)  :  " + Teacher.isAssignableFrom(Teacher);
  
-//
+console.log("teacher.isInstance(      Student)  :  " + teacher.isInstance(Student);
  
-console.log("teacher.isInstance(      Student)  :  " + new Boolean(teacher.isInstance(Student)).toString());
- 
-console.log("teacher.isInstance(       Object)  :  " + new Boolean(teacher.isInstance(Object)).toString());
+console.log("teacher.isInstance(       Object)  :  " + teacher.isInstance(Object);
  
 console.log(student.say());
  
 console.log(teacher.say());
- 
-//output logs:
- 
+ ```
+ ### output logs:
+ ```
 student.isInstance(   SuperClass)  :  true
-  
 student.isInstance(       Person)  :  true
- 
 student.isInstance(      Student)  :  true
- 
 Student.isAssignableFrom( Person)  :  true
- 
 Student.isAssignableFrom(Student)  :  false
- 
 teacher.isInstance(   SuperClass)  :  true
- 
 teacher.isInstance(       Person)  :  true
- 
 teacher.isInstance(      Teacher)  :  true
- 
 Teacher.isAssignableFrom( Person)  :  true
- 
 Teacher.isAssignableFrom(Teacher)  :  false
- 
 teacher.isInstance(      Student)  :  false
- 
 teacher.isInstance(       Object)  :  true
- 
 I am a student, Tom , 20 year-old.
- 
 I am a teacher, Lili , 30 year-old.
-###API
- Type:Frank.buildType(className:string)
- Type:Frank.FrancFactory.buildType(className:string)
- Type:Type.extendsFrom(clazz:Function/Class/Constructor)
- Type:Type.classBody(func:Function/Class/Constructor)
- Class:Type.toClass()
- FrankBasic:Class.newInstance()
- FrankBasic:Frank.newInstance(Class)
- Boolean:Class.isAssignableFrom(clazz:Function/Class/Constructor)
- Boolean:FrankBasic.isInstance(clazz:Function/Class/Constructor)
- FrankBasic.superApply(methodName,arguments)
+```
+### API
+ 1. Type: Frank.buildType(className:string)
+ 2. Type: Frank.FrancFactory.buildType(className:string)
+ 3. Type: Type.extendsFrom(clazz:Function/Class/Constructor)
+ 4. Type: Type.classBody(func:Function/Class/Constructor)
+ 5. Class: Type.toClass()
+ 6. FrankBasic: Class.newInstance()
+ 7. FrankBasic: Frank.newInstance(Class)
+ 8. Boolean: Class.isAssignableFrom(clazz:Function/Class/Constructor)
+ 9. Boolean: FrankBasic.isInstance(clazz:Function/Class/Constructor)
+ 10. FrankBasic.superApply(methodName,arguments)
 ### Tools
 
 Created with [Nodeclipse](https://github.com/Nodeclipse/nodeclipse-1)
